@@ -193,6 +193,112 @@
         font-size: 26px;
       }
     }
+ /* Chat floating button */
+.chat-launcher {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 50px;
+  height: 50px;
+  background: #0ea5e9;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  z-index: 999;
+}
+
+/* Chat window */
+.chat-window {
+  position: fixed;
+  right: 20px;
+  bottom: 80px;
+  width: 320px;
+  height: 420px;
+  background: #020617;
+  border: 1px solid #475569;
+  border-radius: 12px;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+/* Header */
+.chat-header {
+  background: #0f172a;
+  padding: 10px;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  color: #e2e8f0;
+  border-bottom: 1px solid #334155;
+}
+
+.chat-close {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* Messages */
+.chat-messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  font-size: 14px;
+  color: #e2e8f0;
+}
+
+.msg {
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  width: fit-content;
+  max-width: 85%;
+}
+
+.msg.bot {
+  background: #1e293b;
+}
+
+.msg.me {
+  background: #0ea5e9;
+  color: white;
+  margin-left: auto;
+}
+
+/* Input row */
+.chat-input-row {
+  padding: 10px;
+  display: flex;
+  gap: 6px;
+  border-top: 1px solid #334155;
+  background: #0f172a;
+}
+
+.chat-input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #475569;
+  background: #1e293b;
+  color: white;
+}
+
+.chat-send {
+  padding: 8px 14px;
+  background: #0ea5e9;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
   </style>
 </head>
 <body>
@@ -359,6 +465,64 @@
 
     // 自动填当前年份
     document.getElementById("year").textContent = new Date().getFullYear();
+    function toggleChat() {
+  const w = document.getElementById("chatWindow");
+  w.style.display = (w.style.display === "flex") ? "none" : "flex";
+}
+
+function closeChat() {
+  document.getElementById("chatWindow").style.display = "none";
+}
+
+function sendMessage() {
+  const input = document.getElementById("chatInput");
+  const text = input.value.trim();
+  if (!text) return;
+
+  appendMessage(text, "me");
+  input.value = "";
+
+  setTimeout(() => {
+    appendMessage(
+      "Thanks! I'm still a prototype — future messages will be answered by a real AI trained on my background.",
+      "bot"
+    );
+  }, 400);
+}
+
+function appendMessage(text, type) {
+  const msgBox = document.getElementById("chatMessages");
+  const div = document.createElement("div");
+  div.className = `msg ${type}`;
+  div.textContent = text;
+  msgBox.appendChild(div);
+  msgBox.scrollTop = msgBox.scrollHeight;
+}
+
   </script>
+<!-- Chat launcher button -->
+<div class="chat-launcher" onclick="toggleChat()">💬</div>
+
+<!-- Chat window -->
+<div class="chat-window" id="chatWindow">
+  <div class="chat-header">
+    <span>Chat with Vickie (early version)</span>
+    <span class="chat-close" onclick="closeChat()">×</span>
+  </div>
+
+  <div class="chat-messages" id="chatMessages">
+    <div class="msg bot">
+      Hi! This is an early chat prototype.  
+      In the future this will be powered by an AI that knows my background.  
+      For now, feel free to ask me anything :)
+    </div>
+  </div>
+
+  <div class="chat-input-row">
+    <input id="chatInput" class="chat-input" placeholder="Type your question..." />
+    <button class="chat-send" onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
 </body>
 </html>
