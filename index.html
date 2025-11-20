@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vickie · Product Manager</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* 整体样式 */
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0b1120; /* 深色背景 */
+      color: #e5e7eb;      /* 字体浅灰 */
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    /* 顶部导航 */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    .logo {
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      font-size: 13px;
+    }
+
+    nav a {
+      margin-left: 16px;
+      font-size: 14px;
+      color: #9ca3af;
+    }
+
+    nav a:hover {
+      color: #e5e7eb;
+    }
+
+    /* Hero 区域 */
+    .hero {
+      margin-bottom: 40px;
+    }
+
+    .hero-title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      color: #9ca3af;
+      margin-bottom: 16px;
+      max-width: 540px;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .tag {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid #4b5563;
+      color: #d1d5db;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 14px;
+      border: 1px solid #4b5563;
+      background: transparent;
+      color: #e5e7eb;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: #0ea5e9;
+      border-color: #0ea5e9;
+      color: #0b1120;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    /* section 通用 */
+    section {
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .section-desc {
+      font-size: 14px;
+      color: #9ca3af;
+      margin-bottom: 16px;
+      max-width: 520px;
+    }
+
+    /* 卡片列表 */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      border-radius: 12px;
+      border: 1px solid #4b5563;
+      padding: 12px 14px;
+      background: #020617;
+      font-size: 14px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      font-weight: 500;
+    }
+
+    .card-meta {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .card-body {
+      font-size: 13px;
+      color: #d1d5db;
+    }
+
+    .card-tags {
+      margin-top: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
+    .card-tag {
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid #4b5563;
+    }
+
+    footer {
+      margin-top: 32px;
+      font-size: 12px;
+      color: #6b7280;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* 小屏适配 */
+    @media (max-width: 600px) {
+      .hero-title {
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="logo">VICKIE LIU</div>
+      <nav>
+        <a href="#about">About</a>
+        <a href="#experience">Experience</a>
+        <a href="#projects">Projects</a>
+      </nav>
+    </header>
+
+    <!-- 顶部介绍区域 -->
+    <section class="hero">
+      <div class="hero-title">Hi, I'm Vickie.</div>
+      <div class="hero-subtitle">
+        Product manager with experience across mobile OS, brand communities and fintech growth.
+        Currently in the UK exploring how AI and brand communities can work together.
+      </div>
+      <div class="hero-tags">
+        <span class="tag">Product · Community · Growth</span>
+        <span class="tag">Fintech</span>
+        <span class="tag">Brand Community</span>
+        <span class="tag">AI & LLM</span>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="scrollToSection('projects')">View projects</button>
+        <button class="btn" onclick="scrollToSection('about')">More about me</button>
+      </div>
+    </section>
+
+    <!-- About 区域 -->
+    <section id="about">
+      <h2 class="section-title">About</h2>
+      <p class="section-desc">
+        I'm a product manager with 7+ years of experience in mobile OS, online communities and fintech apps.
+        I used to build products for global users at OnePlus and moomoo, and I'm now in the UK for my master's.
+      </p>
+    </section>
+
+    <!-- Experience 区域 -->
+    <section id="experience">
+      <h2 class="section-title">Experience</h2>
+      <p class="section-desc">
+        A short timeline of where I've been. I can share more details in conversation.
+      </p>
+      <div class="cards">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">moomoo · Product Manager</span>
+            <span class="card-meta">2021 – 2024</span>
+          </div>
+          <div class="card-body">
+            Worked on community & growth for a global investing app,
+            especially market expansion and onboarding in Canada.
+          </div>
+          <div class="card-tags">
+            <span class="card-tag">Fintech</span>
+            <span class="card-tag">Community</span>
+            <span class="card-tag">Growth</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">OnePlus · Product Manager</span>
+            <span class="card-meta">2018 – 2021</span>
+          </div>
+          <div class="card-body">
+            Worked on Android OS experience and the OnePlus community app,
+            including co-creation and user growth projects.
+          </div>
+          <div class="card-tags">
+            <span class="card-tag">Android OS</span>
+            <span class="card-tag">Brand Community</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Master's · UK</span>
+            <span class="card-meta">2024 –</span>
+          </div>
+          <div class="card-body">
+            Exploring how large language models can analyse community feedback
+            to inform brand strategy and product decisions.
+          </div>
+          <div class="card-tags">
+            <span class="card-tag">AI & LLM</span>
+            <span class="card-tag">Research</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects 区域 -->
+    <section id="projects">
+      <h2 class="section-title">Selected projects</h2>
+      <p class="section-desc">
+        A few projects I've worked on. I can share more details, trade-offs and learnings.
+      </p>
+      <div class="cards">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Ideas 2.0 · OnePlus</span>
+            <span class="card-meta">Co-creation platform</span>
+          </div>
+          <div class="card-body">
+            Redesigned a global co-creation platform where users propose and vote on OS features,
+            improving discoverability and feedback loops.
+          </div>
+          <div class="card-tags">
+            <span class="card-tag">Co-creation</span>
+            <span class="card-tag">Community</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Onboarding · moomoo</span>
+            <span class="card-meta">Canada market</span>
+          </div>
+          <div class="card-body">
+            Re-structured the account & funding flow as configurable modules,
+            enabling faster experiments and better conversion.
+          </div>
+          <div class="card-tags">
+            <span class="card-tag">Onboarding</span>
+            <span class="card-tag">Growth</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">LLM for community feedback</span>
+            <span class="card-meta">Dissertation</span>
+          </div>
+          <div class="card-body">
+            Comparing manual, rule-based and LLM-based analysis of community posts
+            to support brand and product decisions.
+          </div>
+          <div class="card-tags">
+            <span class="card-tag">LLM</span>
+            <span class="card-tag">Brand Community</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>© <span id="year"></span> Vickie Liu</span>
+      <span>Personal site · early version</span>
+    </footer>
+  </div>
+
+  <script>
+    // 点击按钮滚动到指定 section
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+
+    // 自动填当前年份
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
