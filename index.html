@@ -474,21 +474,38 @@ function closeChat() {
   document.getElementById("chatWindow").style.display = "none";
 }
 
-function sendMessage() {
+async function sendMessage() {
   const input = document.getElementById("chatInput");
   const text = input.value.trim();
   if (!text) return;
 
+  // 1. 先把用户自己的话显示出来
   appendMessage(text, "me");
   input.value = "";
 
-  setTimeout(() => {
-    appendMessage(
-      "Thanks! I'm still a prototype — future messages will be answered by a real AI trained on my background.",
-      "bot"
-    );
-  }, 400);
+  // 2. 可以先加一个“思考中”的占位（可选）
+  appendMessage("Thinking... (来自后端的回复加载中)", "bot");
+
+  try {
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ question: text }),
+    });
+
+    const data = await response.json();
+
+    // 删除刚才那句 "Thinking..."（简单方式：重新渲染也行，
+    // 这里我们选择再追加一条正式回复就好，不删也不会出问题）
+    appendMessage(data.answer || "后端返回了一个空的回答。", "bot");
+  } catch (err) {
+    appendMessage("抱歉，后端暂时出错了，请稍后再试。", "bot");
+    console.error(err);
+  }
 }
+
 
 function appendMessage(text, type) {
   const msgBox = document.getElementById("chatMessages");
