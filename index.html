@@ -194,7 +194,7 @@
       }
     }
  /* Chat floating button */
-.chat-launcher {
+ .chat-launcher {
   position: fixed;
   right: 20px;
   bottom: 20px;
@@ -202,14 +202,15 @@
   height: 50px;
   background: #0ea5e9;
   color: white;
-  border-radius: 50%;
+  border-radius: 999px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 22px;
   cursor: pointer;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.6);
   z-index: 999;
+  border: 1px solid rgba(148, 163, 184, 0.4);
 }
 
 /* Chat window */
@@ -217,59 +218,123 @@
   position: fixed;
   right: 20px;
   bottom: 80px;
-  width: 320px;
-  height: 420px;
+  width: 340px;
+  max-height: 480px;
   background: #020617;
-  border: 1px solid #475569;
-  border-radius: 12px;
+  border: 1px solid #334155;
+  border-radius: 16px;
   display: none;
   flex-direction: column;
   overflow: hidden;
   z-index: 1000;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.9);
 }
 
 /* Header */
 .chat-header {
-  background: #0f172a;
-  padding: 10px;
-  font-size: 14px;
+  background: linear-gradient(to right, #020617, #0f172a);
+  padding: 10px 12px;
+  font-size: 13px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   color: #e2e8f0;
-  border-bottom: 1px solid #334155;
+  border-bottom: 1px solid #1f2937;
+}
+
+.chat-header span:first-child {
+  font-weight: 500;
 }
 
 .chat-close {
   cursor: pointer;
   font-weight: bold;
   font-size: 18px;
+  color: #94a3b8;
 }
 
-/* Messages */
+/* Messages container */
 .chat-messages {
   flex: 1;
-  padding: 10px;
+  padding: 12px;
   overflow-y: auto;
-  font-size: 14px;
+  font-size: 13px;
   color: #e2e8f0;
+  background: radial-gradient(circle at top left, #020617, #020617 40%, #020617 100%);
 }
 
+/* Scrollbar 美化（可选） */
+.chat-messages::-webkit-scrollbar {
+  width: 6px;
+}
+.chat-messages::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 999px;
+}
+
+/* Message bubbles */
 .msg {
   margin-bottom: 10px;
   padding: 8px 10px;
-  border-radius: 8px;
-  width: fit-content;
-  max-width: 85%;
+  border-radius: 12px;
+  max-width: 90%;
+  line-height: 1.5;
+  word-wrap: break-word;
 }
 
+/* Bot（左侧气泡） */
 .msg.bot {
-  background: #1e293b;
+  background: #020617;
+  border: 1px solid #1f2937;
+  align-self: flex-start;
 }
 
+/* Me（右侧气泡） */
 .msg.me {
   background: #0ea5e9;
   color: white;
   margin-left: auto;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+/* Markdown 内容的一些细节样式 */
+.msg.bot h1,
+.msg.bot h2,
+.msg.bot h3 {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 4px 0;
+}
+
+.msg.bot p {
+  margin: 2px 0 4px;
+}
+
+.msg.bot ul {
+  padding-left: 18px;
+  margin: 2px 0 4px;
+}
+
+.msg.bot li {
+  margin: 1px 0;
+}
+
+.msg.bot code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  font-size: 12px;
+  background: #020617;
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+
+.msg.bot pre {
+  background: #020617;
+  padding: 6px 8px;
+  border-radius: 6px;
+  overflow-x: auto;
+  border: 1px solid #1e293b;
 }
 
 /* Input row */
@@ -277,26 +342,38 @@
   padding: 10px;
   display: flex;
   gap: 6px;
-  border-top: 1px solid #334155;
-  background: #0f172a;
+  border-top: 1px solid #1f2937;
+  background: #020617;
 }
 
 .chat-input {
   flex: 1;
   padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #475569;
-  background: #1e293b;
-  color: white;
+  border-radius: 999px;
+  border: 1px solid #1f2937;
+  background: #020617;
+  color: #e5e7eb;
+  font-size: 13px;
+}
+
+.chat-input:focus {
+  outline: none;
+  border-color: #0ea5e9;
 }
 
 .chat-send {
-  padding: 8px 14px;
+  padding: 8px 16px;
   background: #0ea5e9;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 999px;
   cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.chat-send:hover {
+  filter: brightness(1.05);
 }
 
   </style>
@@ -479,13 +556,15 @@ async function sendMessage() {
   const text = input.value.trim();
   if (!text) return;
 
-  // 自己的问题
-  appendMessage(text, "me");
+  // 回车后清空输入框
   input.value = "";
 
-  // 占位“Thinking...”
+  // 显示用户自己的气泡
+  appendMessage(text, "me");
+
+  // 加一个占位“Thinking…”气泡
   const thinkingBubble = appendMessage(
-    "Thinking... (来自后端的回复加载中)",
+    "Thinking...",
     "bot"
   );
 
@@ -500,7 +579,7 @@ async function sendMessage() {
 
     const data = await response.json();
 
-    // 删掉 Thinking 那条
+    // 删除“Thinking…”那条
     if (thinkingBubble && thinkingBubble.parentNode) {
       thinkingBubble.parentNode.removeChild(thinkingBubble);
     }
@@ -521,15 +600,30 @@ async function sendMessage() {
 
 
 
+
 function appendMessage(text, type) {
   const msgBox = document.getElementById("chatMessages");
   const div = document.createElement("div");
   div.className = `msg ${type}`;
-  div.textContent = text;
+
+  if (type === "bot") {
+    // 使用 marked 渲染 markdown → HTML
+    try {
+      div.innerHTML = marked.parse(text);
+    } catch (e) {
+      // 解析异常就退回纯文本
+      div.textContent = text;
+    }
+  } else {
+    // 自己说的话用纯文本即可，防止奇怪符号被当成 HTML
+    div.textContent = text;
+  }
+
   msgBox.appendChild(div);
   msgBox.scrollTop = msgBox.scrollHeight;
-  return div;  // 返回这个气泡，后面可以删掉它
+  return div; // 方便 sendMessage 删除“Thinking...”那条
 }
+
 
 
   </script>
@@ -556,6 +650,8 @@ function appendMessage(text, type) {
     <button class="chat-send" onclick="sendMessage()">Send</button>
   </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 </body>
 </html>
