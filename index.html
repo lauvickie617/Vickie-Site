@@ -479,12 +479,15 @@ async function sendMessage() {
   const text = input.value.trim();
   if (!text) return;
 
-  // 1. 先把用户自己的话显示出来
+  // 自己的问题
   appendMessage(text, "me");
   input.value = "";
 
-  // 2. 可以先加一个“思考中”的占位（可选）
-  appendMessage("Thinking... (来自后端的回复加载中)", "bot");
+  // 占位“Thinking...”
+  const thinkingBubble = appendMessage(
+    "Thinking... (来自后端的回复加载中)",
+    "bot"
+  );
 
   try {
     const response = await fetch("/api/chat", {
@@ -497,14 +500,25 @@ async function sendMessage() {
 
     const data = await response.json();
 
-    // 删除刚才那句 "Thinking..."（简单方式：重新渲染也行，
-    // 这里我们选择再追加一条正式回复就好，不删也不会出问题）
-    appendMessage(data.answer || "后端返回了一个空的回答。", "bot");
+    // 删掉 Thinking 那条
+    if (thinkingBubble && thinkingBubble.parentNode) {
+      thinkingBubble.parentNode.removeChild(thinkingBubble);
+    }
+
+    if (data && typeof data.answer === "string" && data.answer.trim()) {
+      appendMessage(data.answer, "bot");
+    } else {
+      appendMessage("后端返回了一个没有 answer 字段的响应。", "bot");
+    }
   } catch (err) {
-    appendMessage("抱歉，后端暂时出错了，请稍后再试。", "bot");
     console.error(err);
+    if (thinkingBubble && thinkingBubble.parentNode) {
+      thinkingBubble.parentNode.removeChild(thinkingBubble);
+    }
+    appendMessage("抱歉，调用后端接口失败了，请稍后再试。", "bot");
   }
 }
+
 
 
 function appendMessage(text, type) {
@@ -514,7 +528,9 @@ function appendMessage(text, type) {
   div.textContent = text;
   msgBox.appendChild(div);
   msgBox.scrollTop = msgBox.scrollHeight;
+  return div;  // 返回这个气泡，后面可以删掉它
 }
+
 
   </script>
 <!-- Chat launcher button -->
