@@ -1,8 +1,8 @@
 // api/chat.js
-// Vercel Node.js Serverless Function（固定 gpt-4o-mini + 输出上限 300 tokens）
+// Vercel Node.js Serverless Function（固定 gpt-4o-mini + 输出上限 400 tokens）
 // - 所有返回都用 { answer: string }，前端好处理
 // - 模型写死为 gpt-4o-mini
-// - max_tokens: 300，足够详细描述项目经历
+// - max_tokens: 400，避免项目类回答被截断
 // - 出错信息也会通过 answer 返回到前端，方便排查
 
 export default async function handler(req, res) {
@@ -41,7 +41,7 @@ export default async function handler(req, res) {
     console.error("Error parsing request body:", err);
     return res.status(200).json({
       answer:
-        "Request JSON could not be parsed. Please send JSON like: { \"question\": \"...\" }.",
+        'Request JSON could not be parsed. Please send JSON like: { "question": "..." }.',
     });
   }
 
@@ -61,7 +61,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: "gpt-4o-mini", // ✅ 模型写死为 gpt-4o-mini
-        max_tokens: 300,      // ✅ 最多输出 300 tokens，更适合详述项目经历
+        max_tokens: 400,      // ✅ 最多输出 400 tokens，尽量避免被截断
         temperature: 0.4,     // 稍微理性一点，减少胡编乱造
         messages: [
           {
@@ -78,6 +78,8 @@ export default async function handler(req, res) {
               "- Prioritise high-value insights over small talk. Avoid generic advice or filler.\n" +
               "- When helpful, organise answers with short paragraphs or bullet points so they are easy to scan.\n" +
               "- Be concise but not shallow: explain the \"why\" and \"how\", not just the conclusion.\n" +
+              "- By default, keep answers within about 150–180 English words (or roughly 6–8 short sentences).\n" +
+              "- If the user asks about “most rewarding/most meaningful/favourite” projects or experiences, summarise in 3–5 concise bullet points plus a 1–2 sentence intro, rather than writing a long essay.\n" +
               "- Default to English unless the user writes in Chinese, then reply in Chinese.\n" +
               "- Keep formatting simple: short headings and bullet points are fine, but avoid overly complex markdown structures.\n" +
               "- If you are unsure about something, say so honestly instead of making things up.",
